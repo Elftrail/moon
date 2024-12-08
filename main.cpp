@@ -55,86 +55,99 @@ int main()
    Font font;
    font.loadFromFile("Text.ttf");
  
+   //Bref coor pool and set
    Text numerationNUM[2];
    Text numerationLIT[10][2];
-  
    setCoor(numerationLIT, numerationNUM, font);
-   /*numerationNUM[0].setString(L" 1 2 3 4 5 6 7 8 9 10");
-   numerationNUM[1].setString(L" 1 2 3 4 5 6 7 8 9 10");
-   numerationNUM[0].setPosition(100, 140);
-   numerationNUM[1].setPosition(750, 140);
-   numerationNUM[0].setFont(font);
-   numerationNUM[1].setFont(font);
-   numerationNUM[0].setCharacterSize(50);
-   numerationNUM[1].setCharacterSize(50);
 
-   String literals_for_num(L"јЅ¬√ƒ≈∆«» ");
-   for (int i = 0; i < 10; i++)
+   Text strVarPos [62];
+   for (int i = 0; i < 62; i++) 
    {
-	   for (int j = 0; j < 2; j++) 
+	   strVarPos[i].setFont(font);
+	   strVarPos[i].setPosition(40+20*i, 750);
+   }
+   String VarPos (L"т-щ капитан! изволите сами зан€тьс€ боевым пор€дком? да / нет");
+
+   
+   Clock clok;
+   float FPS=0;
+   int fast_print_text=0;
+   int iterVar=0;
+   while (window.isOpen())
+   {
+	   sf::Event event;
+	   while (window.pollEvent(event))
 	   {
-		   numerationLIT[i][j].setString(literals_for_num[i]);
-		   numerationLIT[i][j].setFont(font);
-		   numerationLIT[i][j].setCharacterSize(50);
-		   if (j == 0)
-		   {
-			   numerationLIT[i][j].setPosition(45, 190 + i * 50);
-		   }
-		   if (j == 1)
-		   {
-			   numerationLIT[i][j].setPosition(695, 190 + i * 50);
-		   }
+		   if (event.type == sf::Event::Closed)
+			   window.close();
 	   }
-   }*/
-   
-   
+	   FPS+= clok.getElapsedTime().asMilliseconds();
+	
+	    
+
+	   if (FPS > 16.6) 
+	   {
+		   
+		   window.clear(Color::Black);
+
+		   window.draw(sFon);
+
+		   // mouse chek position
+		   int my = Mouse::getPosition(window).y;
+		   int mx = Mouse::getPosition(window).x;
+
+
+		   //print poole oponent and user
+		   for (int y = 0; y < 10; y++)
+		   {
+			   for (int x = 0; x < 10; x++)
+			   {
+				   user[y][x].ChekActiv(mx, my);
+				   window.draw(user[y][x].GetSprite());
+				   oponent[y][x].ChekActiv(mx, my);
+				   window.draw(oponent[y][x].GetSprite());
+			   }
+		   }
+
+		   //print coord pools
+		   for (int i = 0; i < 2; i++)
+		   {
+			   window.draw(numerationNUM[i]);
+			   for (int j = 0; j < 10; j++)
+			   {
+				   window.draw(numerationLIT[j][i]);
+			   }
+		   }
+
+		   
+		   cout << fast_print_text << endl;
+		  
+		   for (int i = 0; i < 61; i++)
+
+		   {
+			   if (fast_print_text > 900)
+			   {
+				   if (iterVar < 61)
+				   {
+					   
+					   strVarPos[iterVar].setString(VarPos[iterVar]);
+					   fast_print_text = 0;
+					   iterVar++;
+				   }
+
+			   }
+			   else { fast_print_text++;}
+			   window.draw(strVarPos[i]);
+		   }
 
 
 
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
 
-		window.clear(Color::Black);
-
-		window.draw(sFon);
-
-		// mouse chek position
-		int my = Mouse::getPosition(window).y;
-		int mx = Mouse::getPosition(window).x;
-		
-		
-		//print poole oponent and user
-		for (int y = 0; y < 10; y++)
-		{
-			for (int x = 0; x < 10; x++)
-			{
-				user[y][x].ChekActiv(mx, my);
-				window.draw(user[y][x].GetSprite());
-				oponent[y][x].ChekActiv(mx, my);
-				window.draw(oponent[y][x].GetSprite());
-			}
-		}
-
-		//print coord pools
-		for (int i = 0; i < 2; i++)
-		{
-			window.draw(numerationNUM[i]);
-			for (int j = 0; j < 10; j++) 
-			{
-				window.draw(numerationLIT[j][i]);
-			}
-		}
-		
-
-		window.display();
-	}
-
+		   window.display();
+		   FPS = 0;
+		   clok.restart();
+	   }
+   }
 	
 
 
