@@ -37,8 +37,8 @@ int main()
 	}
 
 	//Quality setting to an pools user and oponent//
-	setQuality(oponent, false);
-	setQuality(user, true);
+	setQuality(oponent, false,sArr,sArr);
+	setQuality(user, true, sArr, sArr);
 
 	//generation ships oponent
 	GenerationShip(oponent);
@@ -79,10 +79,11 @@ int main()
    BotNo.setPosition(1190, 750);
    BotNo.setSize(Vector2f::Vector2(80, 35));
 
+   RectangleShape XXXX;
+   XXXX.setSize(Vector2f::Vector2(200, 50));
+   XXXX.setPosition(100, 750);
 
-
-
-
+   
 
 
    
@@ -94,13 +95,44 @@ int main()
 
    bool PressBotVsrShip = false;
 
+   bool isMove = false;
+
+   int corX = 0;
+   int corY = 0;
+
    while (window.isOpen())
    {
+	   // mouse chek position
+	   int my = Mouse::getPosition(window).y;
+	   int mx = Mouse::getPosition(window).x;
+
+
 	   sf::Event event;
+
 	   while (window.pollEvent(event))
 	   {
+		   
 		   if (event.type == sf::Event::Closed)
 			   window.close();
+		 if (event.type == Event::MouseButtonPressed)
+		   {
+			   if (event.key.code == Mouse::Left) 
+			   {
+				   if(chekActivBot(mx,my,XXXX))
+				   {
+					   isMove = true;
+					   corX=mx-XXXX.getPosition().x;
+					   corY=my-XXXX.getPosition().y;
+				   }
+			   }
+		   }
+		 if (event.type == Event::MouseButtonReleased)
+		 {
+			 if (event.key.code == Mouse::Left)
+			 {
+					 isMove = false;
+			 }
+		 }
 	   }
 	   FPS+= clok.getElapsedTime().asMilliseconds();
 	
@@ -113,9 +145,7 @@ int main()
 
 		   window.draw(sFon);
 
-		   // mouse chek position
-		   int my = Mouse::getPosition(window).y;
-		   int mx = Mouse::getPosition(window).x;
+		   
 		   cout << "mx  " << mx << "  my  " << my << endl;
 
 		   //print poole oponent and user
@@ -140,7 +170,7 @@ int main()
 			   }
 		   }
 
-		   //print ar of position ships user
+		   //print bot of position ships user
 		   for (int i = 0; i < 61; i++)
 
 		   {
@@ -184,7 +214,14 @@ int main()
 
 			   if (!PressBotVsrShip) { window.draw(strVarPos[i]); }
 		   }
-
+		   
+		   if(isMove)
+		   {
+			  XXXX.setPosition(mx-corX,my-corY);
+		   }
+		  
+		   window.draw(XXXX);
+		  
 
 
 
