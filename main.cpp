@@ -6,6 +6,7 @@
 #include"setQuality.h"
 #include"GenerationShip.h"
 #include"setCoor.h"
+#include"chekActivBot.h"
 
 using namespace std;
 using namespace sf;
@@ -41,6 +42,7 @@ int main()
 
 	//generation ships oponent
 	GenerationShip(oponent);
+	
 
 	//Declaration Window//
 	RenderWindow window(VideoMode(1350, 850), "looock! this is Saylor Moon!!!!");
@@ -60,6 +62,7 @@ int main()
    Text numerationLIT[10][2];
    setCoor(numerationLIT, numerationNUM, font);
 
+   //breef text var of set ship
    Text strVarPos [62];
    for (int i = 0; i < 62; i++) 
    {
@@ -68,11 +71,29 @@ int main()
    }
    String VarPos (L"т-щ капитан! изволите сами заняться боевым порядком? да / нет");
 
+   RectangleShape BotYas;
+   BotYas.setPosition(1090, 750);
+   BotYas.setSize(Vector2f::Vector2(60, 35));
+
+   RectangleShape BotNo;
+   BotNo.setPosition(1190, 750);
+   BotNo.setSize(Vector2f::Vector2(80, 35));
+
+
+
+
+
+
+
    
    Clock clok;
    float FPS=0;
-   int fast_print_text=0;
-   int iterVar=0;
+
+   int fast_print_text=0;	//var to print var os set ship     //
+   int iterVar=0;			/////////////////////////////////////
+
+   bool PressBotVsrShip = false;
+
    while (window.isOpen())
    {
 	   sf::Event event;
@@ -85,7 +106,7 @@ int main()
 	
 	    
 
-	   if (FPS > 16.6) 
+	   if (FPS > 16.6) //60 FPS= print in 16.6 mili sek
 	   {
 		   
 		   window.clear(Color::Black);
@@ -95,7 +116,7 @@ int main()
 		   // mouse chek position
 		   int my = Mouse::getPosition(window).y;
 		   int mx = Mouse::getPosition(window).x;
-
+		   cout << "mx  " << mx << "  my  " << my << endl;
 
 		   //print poole oponent and user
 		   for (int y = 0; y < 10; y++)
@@ -119,17 +140,15 @@ int main()
 			   }
 		   }
 
-		   
-		   cout << fast_print_text << endl;
-		  
+		   //print ar of position ships user
 		   for (int i = 0; i < 61; i++)
 
 		   {
+
 			   if (fast_print_text > 900)
 			   {
 				   if (iterVar < 61)
 				   {
-					   
 					   strVarPos[iterVar].setString(VarPos[iterVar]);
 					   fast_print_text = 0;
 					   iterVar++;
@@ -137,8 +156,36 @@ int main()
 
 			   }
 			   else { fast_print_text++;}
-			   window.draw(strVarPos[i]);
+			   if (chekActivBot(mx, my, BotYas)) {
+				   strVarPos[53].setFillColor(Color::Red);
+				   strVarPos[54].setFillColor(Color::Red);
+			   }
+			   else 
+			   {
+				   strVarPos[53].setFillColor(Color::White);
+				   strVarPos[54].setFillColor(Color::White);
+			   }
+			   if (chekActivBot(mx, my, BotNo)) {
+				   strVarPos[58].setFillColor(Color::Red);
+				   strVarPos[59].setFillColor(Color::Red);
+				   strVarPos[60].setFillColor(Color::Red);
+				   if (Mouse::isButtonPressed(Mouse::Left)&&!PressBotVsrShip&&iterVar>60) 
+				   {
+					   PressBotVsrShip = true;
+					   GenerationShip(user);
+				   }
+			   }
+			   else
+			   {
+				   strVarPos[58].setFillColor(Color::White);
+				   strVarPos[59].setFillColor(Color::White);
+				   strVarPos[60].setFillColor(Color::White);
+			   }
+
+			   if (!PressBotVsrShip) { window.draw(strVarPos[i]); }
 		   }
+
+
 
 
 

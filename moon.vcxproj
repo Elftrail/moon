@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="chekActivBot.cpp" />
     <ClCompile Include="GenerationShip.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
@@ -140,6 +141,7 @@
     <ClCompile Include="setQuality.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="chekActivBot.h" />
     <ClInclude Include="GenerationShip.h" />
     <ClInclude Include="setCoor.h" />
     <ClInclude Include="setQuality.h" />

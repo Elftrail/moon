@@ -4,15 +4,15 @@ int rstr;//rndom string
 int rsto;//random collumns
 int rvec;//random vector
 random_device system_rand;
-int seed = system_rand();
+
 bool Restart;
 
 
 void gen2_3X(Point** arr,int Xs/*size ship*/)
 {
+	int seed = system_rand();
 	srand(seed);
-	
-	
+
 	do
 	{
 			Restart = false;
