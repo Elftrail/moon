@@ -136,10 +136,12 @@
     <ClCompile Include="GenerationShip.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="setCoor.cpp" />
     <ClCompile Include="setQuality.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GenerationShip.h" />
+    <ClInclude Include="setCoor.h" />
     <ClInclude Include="setQuality.h" />
     <ClInclude Include="Point.h" />
   </ItemGroup>

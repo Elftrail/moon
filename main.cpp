@@ -5,6 +5,7 @@
 #include"Point.h"
 #include"setQuality.h"
 #include"GenerationShip.h"
+#include"setCoor.h"
 
 using namespace std;
 using namespace sf;
@@ -56,7 +57,9 @@ int main()
  
    Text numerationNUM[2];
    Text numerationLIT[10][2];
-   numerationNUM[0].setString(L" 1 2 3 4 5 6 7 8 9 10");
+  
+   setCoor(numerationLIT, numerationNUM, font);
+   /*numerationNUM[0].setString(L" 1 2 3 4 5 6 7 8 9 10");
    numerationNUM[1].setString(L" 1 2 3 4 5 6 7 8 9 10");
    numerationNUM[0].setPosition(100, 140);
    numerationNUM[1].setPosition(750, 140);
@@ -82,7 +85,7 @@ int main()
 			   numerationLIT[i][j].setPosition(695, 190 + i * 50);
 		   }
 	   }
-   }
+   }*/
    
    
 
@@ -118,6 +121,7 @@ int main()
 			}
 		}
 
+		//print coord pools
 		for (int i = 0; i < 2; i++)
 		{
 			window.draw(numerationNUM[i]);
