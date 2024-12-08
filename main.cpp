@@ -26,9 +26,6 @@ int main()
 	{
 		oponent[i] = new Point[sArr]{};
 	}
-	
-	//Quality setting to an pools oponent//
-	setQuality(oponent,false);
 
 	//declaration poole from user//
 	Point** user = { new Point * [sArr] {} };
@@ -37,10 +34,12 @@ int main()
 		user[i] = new Point[sArr]{};
 	}
 
-	//Quality setting to an pools user//
+	//Quality setting to an pools user and oponent//
+	setQuality(oponent, false);
 	setQuality(user, true);
-	GenerationShip(oponent);
 
+	//generation ships oponent
+	GenerationShip(oponent);
 
 	//Declaration Window//
 	RenderWindow window(VideoMode(1350, 850), "looock! this is Saylor Moon!!!!");
@@ -51,11 +50,44 @@ int main()
    Fon.loadFromFile("sprits/Fon.png");
    sFon.setTexture(Fon);
   
+   //Declaration Fonts//
+   Font font;
+   font.loadFromFile("Text.ttf");
+ 
+   Text numerationNUM[2];
+   Text numerationLIT[10][2];
+   numerationNUM[0].setString(L" 1 2 3 4 5 6 7 8 9 10");
+   numerationNUM[1].setString(L" 1 2 3 4 5 6 7 8 9 10");
+   numerationNUM[0].setPosition(100, 140);
+   numerationNUM[1].setPosition(750, 140);
+   numerationNUM[0].setFont(font);
+   numerationNUM[1].setFont(font);
+   numerationNUM[0].setCharacterSize(50);
+   numerationNUM[1].setCharacterSize(50);
+
+   String literals_for_num(L"¿¡¬√ƒ≈∆«» ");
+   for (int i = 0; i < 10; i++)
+   {
+	   for (int j = 0; j < 2; j++) 
+	   {
+		   numerationLIT[i][j].setString(literals_for_num[i]);
+		   numerationLIT[i][j].setFont(font);
+		   numerationLIT[i][j].setCharacterSize(50);
+		   if (j == 0)
+		   {
+			   numerationLIT[i][j].setPosition(45, 190 + i * 50);
+		   }
+		   if (j == 1)
+		   {
+			   numerationLIT[i][j].setPosition(695, 190 + i * 50);
+		   }
+	   }
+   }
    
-   float summiter=0;
-   int iter=0;
-  
    
+
+
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -86,7 +118,15 @@ int main()
 			}
 		}
 
-
+		for (int i = 0; i < 2; i++)
+		{
+			window.draw(numerationNUM[i]);
+			for (int j = 0; j < 10; j++) 
+			{
+				window.draw(numerationLIT[j][i]);
+			}
+		}
+		
 
 		window.display();
 	}
@@ -95,7 +135,7 @@ int main()
 
 
 	
-	cout << "srednyaya skorost cikla= " <<summiter/iter << endl;
+	
 
 
 
@@ -103,12 +143,9 @@ int main()
 	for (int i = 0; i < sArr; i++)
 	{
 		delete[] oponent[i];
-	}
-	delete[] oponent;
-	for (int i = 0; i < sArr; i++)
-	{
 		delete[] user[i];
 	}
+	delete[] oponent;
 	delete[] user;
 
 	return 0;
