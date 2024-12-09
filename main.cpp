@@ -126,19 +126,19 @@ int main()
 		 {
 			 if (event.key.code == Mouse::Left)
 			 {
-				movedShip(event,XXXX,isMove,isMontage, isCorrect,mx,my,corX,corY,pressR);
+				movedShip(event,XXXX,isMove,isMontage, isCorrect,mx,my,corX,corY);
 			 }
 		 }
 		 if (event.type == Event::MouseButtonReleased)
 		 {
 			 if (event.key.code == Mouse::Left)
 			 {
-				 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY,pressR);
+				 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);
 			 }
 		 }
 		 if (event.type == sf::Event::KeyPressed && isMontage > 0)
 		 {
-			 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY,pressR);
+			 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);
 		 }
 
 	   }
