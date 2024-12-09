@@ -7,6 +7,7 @@
 #include"GenerationShip.h"
 #include"setCoor.h"
 #include"chekActivBot.h"
+#include"movedShip.h"
 
 using namespace std;
 using namespace sf;
@@ -90,12 +91,18 @@ int main()
    Clock clok;
    float FPS=0;
 
-   int fast_print_text=0;	//var to print var os set ship     //
+   int fast_print_text=0;	//var to print var of set ship     //
    int iterVar=0;			/////////////////////////////////////
 
    bool PressBotVsrShip = false;
 
    bool isMove = false;
+   bool pressR = false;
+
+   int isMontage = 0; //0 - not used 1 - used now(step 1)  2 - used now(step 2)  3 - final montage
+   bool isCorrect = true;// correct position of ship in pool
+   
+
 
    int corX = 0;
    int corY = 0;
@@ -112,28 +119,32 @@ int main()
 	   while (window.pollEvent(event))
 	   {
 		   
-		   if (event.type == sf::Event::Closed)
+		 if (event.type == sf::Event::Closed)
 			   window.close();
+
 		 if (event.type == Event::MouseButtonPressed)
-		   {
-			   if (event.key.code == Mouse::Left) 
-			   {
-				   if(chekActivBot(mx,my,XXXX))
-				   {
-					   isMove = true;
-					   corX=mx-XXXX.getPosition().x;
-					   corY=my-XXXX.getPosition().y;
-				   }
-			   }
-		   }
+		 {
+			 if (event.key.code == Mouse::Left)
+			 {
+				movedShip(event,XXXX,isMove,isMontage, isCorrect,mx,my,corX,corY,pressR);
+			 }
+		 }
 		 if (event.type == Event::MouseButtonReleased)
 		 {
 			 if (event.key.code == Mouse::Left)
 			 {
-					 isMove = false;
+				 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY,pressR);
 			 }
 		 }
+		 if (event.type == sf::Event::KeyPressed && isMontage > 0)
+		 {
+			 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY,pressR);
+		 }
+
 	   }
+	   
+	   
+	   
 	   FPS+= clok.getElapsedTime().asMilliseconds();
 	
 	    
@@ -146,7 +157,7 @@ int main()
 		   window.draw(sFon);
 
 		   
-		   cout << "mx  " << mx << "  my  " << my << endl;
+		   
 
 		   //print poole oponent and user
 		   for (int y = 0; y < 10; y++)
@@ -215,11 +226,13 @@ int main()
 			   if (!PressBotVsrShip) { window.draw(strVarPos[i]); }
 		   }
 		   
-		   if(isMove)
+		   if (isMove)
 		   {
-			  XXXX.setPosition(mx-corX,my-corY);
+			   XXXX.setPosition(mx - corX, my - corY);
+			   
 		   }
-		  
+
+
 		   window.draw(XXXX);
 		  
 
@@ -228,8 +241,10 @@ int main()
 
 
 		   window.display();
-		   FPS = 0;
-		   clok.restart();
+
+		   
+		   FPS = 0;        //сброс счетчика на ноль
+		   clok.restart(); //перезапук времени для счетчика
 	   }
    }
 	
