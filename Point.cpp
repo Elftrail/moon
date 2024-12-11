@@ -2,7 +2,7 @@
 
 sf::Sprite pool;
 int Status;
-bool activ = false;
+bool activ;
 bool part;
 int size = 50;
 sf::Vector2f position;
@@ -22,10 +22,7 @@ void Point::ChekActiv(int mx, int my)
 {
 	if (mx > position.x && mx<(position.x + size) && my > position.y && my < (position.y + size))
 	{
-
 		activ = true;
-
-
 	}
 	else { activ = false; }
 	SetTextureSprite();
@@ -41,6 +38,7 @@ void Point::SetStatus(int status_pool)
 void Point::SetActivated(bool activated)
 {
 	activ = activated;
+	SetTextureSprite();
 }
 
 void Point::SetParty(bool party)

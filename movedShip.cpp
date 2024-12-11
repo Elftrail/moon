@@ -28,7 +28,7 @@ void movedShip(sf::Event& event, sf::RectangleShape& XXXX, bool& isMove, int& is
 
 		if (event.type == sf::Event::MouseButtonPressed && isMontage == 2)				// Клик мыши при второй стадии монтажа
 		{
-			if (event.key.code == sf::Mouse::Left && isCorrect)							// А именно левой кнопкой
+			if (event.key.code == sf::Mouse::Left && isCorrect)							// А именно левой кнопкой и положение корабля в поле корекно
 			{
 					isMontage = 3;														// Перевод монтажа на стадию = 3
 					isMove = false;														// Запрещаем движение спрайта
@@ -54,7 +54,7 @@ void movedShip(sf::Event& event, sf::RectangleShape& XXXX, bool& isMove, int& is
 																						
 
 			corcorX =mx-XXXX.getPosition().x-25;										//	 
-			corcorY =my-XXXX.getPosition().y-25;										//  Центравка по середине начала спрайта
+			corcorY =my-XXXX.getPosition().y-25;										//  Центровка по середине начала спрайта
 		}																				//
 		
 		corX = mx - XXXX.getPosition().x-corcorX;										//  Присваивание доп.корректоров при повороте спрайта

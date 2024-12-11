@@ -18,7 +18,9 @@ using namespace sf;
 
 int main()
 
-{	//declaration and initialization size arr oponent and user//
+{	
+	setlocale(LC_ALL, "rus");
+	//declaration and initialization size arr oponent and user//
 
 	const int sArr = 10;//size arr pools (const=10)
 	
@@ -83,90 +85,200 @@ int main()
    RectangleShape XXXX;
    XXXX.setSize(Vector2f::Vector2(200, 50));
    XXXX.setPosition(100, 750);
+   
 
    
 
 
    
-   Clock clok;
-   float FPS=0;
+   Clock clok;														// Отсчет времени
+   float dalyFrame=0;												// Счетчик прошедшего времени с момента отрисовки последнего кадра
+   int FPS = 0;														// Счетчик ФПС для привязки динамических событий
 
-   int fast_print_text=0;	//var to print var of set ship     //
-   int iterVar=0;			/////////////////////////////////////
+ 
+   int iterVar=0;													// Счетчик для перебора массива при выводе живого текста первого меню										
 
-   bool PressBotVsrShip = false;
+   bool Bot_AutoShip = false;										// Вентиль кнопки автомонтажа кораблей в меню
 
-   bool isMove = false;
-   bool pressR = false;
+   bool isMove = false;												// Переменная-вентиль для перетаскивания корабля
+   bool pressR = false;												// Переменная для отслеживания R и поворота корабля
 
-   int isMontage = 0; //0 - not used 1 - used now(step 1)  2 - used now(step 2)  3 - final montage
-   bool isCorrect = true;// correct position of ship in pool
+   int isMontage = 0;												// Движение корабля по стадиям 
+																	// 0 - ничего не тронуто 1 - взяли и двигаем   
+																	// 2 - пытаемся положить 3- положиль и зафиксировали
+   bool isCorrect = true;											// Переменная для "Мы кладем корабль коррекно?
+
+   bool ShipMontage = false;										//Вентиль для открытия ручной расстановки кораблей
    
 
 
-   int corX = 0;
-   int corY = 0;
+   int corX = 0;													// Корректировка положения корабл когда его взяли по Х
+   int corY = 0;													// Корректировка положения корабл когда его взяли по У
 
-   while (window.isOpen())
+  
+
+   while (window.isOpen())											// Главный цикл игры
    {
-	   // mouse chek position
-	   int my = Mouse::getPosition(window).y;
-	   int mx = Mouse::getPosition(window).x;
+	   
+	   dalyFrame += clok.getElapsedTime().asMilliseconds();			// Записываем в счетчик прошедшее с момента рестарта время 
+	   int my = Mouse::getPosition(window).y;						// Получаем положение мыши У
+	   int mx = Mouse::getPosition(window).x;						// Получаем положение мыши Х
 
 
 	   sf::Event event;
 
-	   while (window.pollEvent(event))
+	   while (window.pollEvent(event))								// Цикл обработки событий
 	   {
 		   
-		 if (event.type == sf::Event::Closed)
-			   window.close();
+		 if (event.type == sf::Event::Closed)						// Событие нажатия на крестик окна
+			   window.close();										// Закрываем окно
 
-		 if (event.type == Event::MouseButtonPressed)
+
+		 if (event.type == Event::MouseButtonPressed)				// Если нажали на кнопку мыши
 		 {
-			 if (event.key.code == Mouse::Left)
+			 if (event.key.code == Mouse::Left)						// А именно левую
 			 {
-				movedShip(event,XXXX,isMove,isMontage, isCorrect,mx,my,corX,corY);
+				 if (ShipMontage)									// Если вентиль монтажа кораблей открыт
+				 {
+					 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);				// Вызвать функцию движения
+				 }
 			 }
 		 }
-		 if (event.type == Event::MouseButtonReleased)
+
+
+		 if (event.type == Event::MouseButtonReleased)				// Если отпустили на кнопку мыши
 		 {
-			 if (event.key.code == Mouse::Left)
+			 if (event.key.code == Mouse::Left)						// А именно левую
 			 {
-				 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);
+				 if (ShipMontage)									// Если вентиль монтажа кораблей открыт
+				 {
+					 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);				// Вызвать функцию движения
+				 }
 			 }
 		 }
-		 if (event.type == sf::Event::KeyPressed && isMontage > 0)
+
+
+		 if (event.type == sf::Event::KeyPressed)					// Если нажали на кнопку 
 		 {
-			 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);
+			 if (event.key.code == sf::Keyboard::R)					// А именно R
+			 {
+				 if (isMontage > 0 && ShipMontage)					// Если стадия монтажа больше 0 и вентиль монтажа кораблей открыт
+				 {
+					 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);				// Вызвать функцию движения
+				 }
+			 }
 		 }
+
+		
+		 for (int i = 0; i < 61; i++)								// Цицл установки знач. отр. живого текста первого меню
+
+		 {
+
+			 if (chekActivBot(mx, my, BotYas))
+			 {
+				 strVarPos[53].setFillColor(Color::Red);
+				 strVarPos[54].setFillColor(Color::Red);
+				 if (Mouse::isButtonPressed(Mouse::Left) && !ShipMontage && iterVar > 60)
+				 {
+					 ShipMontage = true;
+				 }
+			 }
+			 else
+			 {
+				 strVarPos[53].setFillColor(Color::White);
+				 strVarPos[54].setFillColor(Color::White);
+			 }
+			 if (chekActivBot(mx, my, BotNo)) {
+				 strVarPos[58].setFillColor(Color::Red);
+				 strVarPos[59].setFillColor(Color::Red);
+				 strVarPos[60].setFillColor(Color::Red);
+				 if (Mouse::isButtonPressed(Mouse::Left) && !Bot_AutoShip && iterVar > 60)
+				 {
+					 Bot_AutoShip = true;
+					 GenerationShip(user);
+				 }
+
+			 }
+			 else
+			 {
+				 strVarPos[58].setFillColor(Color::White);
+				 strVarPos[59].setFillColor(Color::White);
+				 strVarPos[60].setFillColor(Color::White);
+			 }
+
+			 if (FPS % 3 > 0 && iterVar < 61)						// Если ФПС % 3  больше нуля И номер символа строки меньше 61
+			 {
+				 strVarPos[iterVar].setString(VarPos[iterVar]);		// Добавить в массив следующий символ из добовляемых
+				 iterVar++;											// Инкремировать итератор символа
+			 }
+		 }
+
+		 int iter = 0;
+		 for (int y = 0; y < 10; y++)								// Цикл проверки полей на активность
+		 {
+			 for (int x = 0; x < 10; x++)
+			 {
+				 if (!ShipMontage) { user[y][x].ChekActiv(mx, my); }
+				
+				 oponent[y][x].ChekActiv(mx, my);
+				 
+				 if (ShipMontage)
+				 {
+					user[y][x].ChekActiv(XXXX.getPosition().x-30+XXXX.getSize().x, XXXX.getPosition().y + XXXX.getSize().y / 2);
+					if(user[y][x].GetActivated()&&(x-3)>-1)
+					{
+						user[y][x - 1].SetActivated(true);
+						user[y][x - 2].SetActivated(true);
+						user[y][x - 3].SetActivated(true);
+						
+						
+					}
+					if (isMontage == 3)
+					{
+						for (int y = 0; y < 10; y++)
+						{
+							for (int x = 0; x < 10; x++)
+							{
+								if(user[y][x].GetActivated())
+								{
+									user[y][x].SetStatus(3);
+								}
+							}
+						}
+					}
+				 }
+			 }
+		 }
+		
+
 
 	   }
-	   
-	   
-	   
-	   FPS+= clok.getElapsedTime().asMilliseconds();
-	
-	    
 
-	   if (FPS > 16.6) //60 FPS= print in 16.6 mili sek
+	   
+	   
+	
+	
+	   if (dalyFrame > 20000)										// Если прошло более 20к милисекунд - отрисовка кадра (20к = +- 60 ФПС)		
 	   {
-		   
+		   if (FPS == 60) { FPS = 0; }								// Если отрисовали 60 кадров - сбрасывам счетчик		
+
 		   window.clear(Color::Black);
 
 		   window.draw(sFon);
 
-		   
-		   
+
+
+		   if (isMove)												// Если можно двигать
+		   {
+			   XXXX.setPosition(mx - corX, my - corY);				// То присваиваем спрайту позицию в зависимости от положения мыши
+		   }
 
 		   //print poole oponent and user
 		   for (int y = 0; y < 10; y++)
 		   {
 			   for (int x = 0; x < 10; x++)
 			   {
-				   user[y][x].ChekActiv(mx, my);
 				   window.draw(user[y][x].GetSprite());
-				   oponent[y][x].ChekActiv(mx, my);
 				   window.draw(oponent[y][x].GetSprite());
 			   }
 		   }
@@ -181,70 +293,33 @@ int main()
 			   }
 		   }
 
-		   //print bot of position ships user
-		   for (int i = 0; i < 61; i++)
-
+			
+		   if (!Bot_AutoShip&&!ShipMontage)							// Отрисовка живого текста и меню выбора монтажа кораблей
 		   {
-
-			   if (fast_print_text > 900)
+			   for (int i = 0; i<61; i++)							// Цикл отрисовки живого текста
 			   {
-				   if (iterVar < 61)
-				   {
-					   strVarPos[iterVar].setString(VarPos[iterVar]);
-					   fast_print_text = 0;
-					   iterVar++;
-				   }
-
+				   { window.draw(strVarPos[i]); }					// Отрисовка символов массива живого текста
 			   }
-			   else { fast_print_text++;}
-			   if (chekActivBot(mx, my, BotYas)) {
-				   strVarPos[53].setFillColor(Color::Red);
-				   strVarPos[54].setFillColor(Color::Red);
-			   }
-			   else 
-			   {
-				   strVarPos[53].setFillColor(Color::White);
-				   strVarPos[54].setFillColor(Color::White);
-			   }
-			   if (chekActivBot(mx, my, BotNo)) {
-				   strVarPos[58].setFillColor(Color::Red);
-				   strVarPos[59].setFillColor(Color::Red);
-				   strVarPos[60].setFillColor(Color::Red);
-				   if (Mouse::isButtonPressed(Mouse::Left)&&!PressBotVsrShip&&iterVar>60) 
-				   {
-					   PressBotVsrShip = true;
-					   GenerationShip(user);
-				   }
-			   }
-			   else
-			   {
-				   strVarPos[58].setFillColor(Color::White);
-				   strVarPos[59].setFillColor(Color::White);
-				   strVarPos[60].setFillColor(Color::White);
-			   }
-
-			   if (!PressBotVsrShip) { window.draw(strVarPos[i]); }
-		   }
-		   
-		   if (isMove)
-		   {
-			   XXXX.setPosition(mx - corX, my - corY);
-			   
 		   }
 
+		   if (ShipMontage) {window.draw(XXXX);}					// Если идет монтаж кораблей отрисовать монтажный макет
 
-		   window.draw(XXXX);
-		  
-
-
+		   window.display();										// Отрисовать всё вышеописанное
 
 
 
-		   window.display();
+		
+		 
 
+
+
+		   FPS++;
+		   dalyFrame = 0;											// Сброс счетчика 
+		   clok.restart();										    // Перезапук времени для счетчика
+
+
+	 
 		   
-		   FPS = 0;        //сброс счетчика на ноль
-		   clok.restart(); //перезапук времени для счетчика
 	   }
    }
 	
