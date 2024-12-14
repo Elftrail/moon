@@ -8,6 +8,7 @@
 #include"setCoor.h"
 #include"chekActivBot.h"
 #include"movedShip.h"
+#include"ShipMontageProcesser.h"
 
 using namespace std;
 using namespace sf;
@@ -82,17 +83,14 @@ int main()
    BotNo.setPosition(1190, 750);
    BotNo.setSize(Vector2f::Vector2(80, 35));
 
-   RectangleShape XXXX;
-   XXXX.setSize(Vector2f::Vector2(200, 50));
-   XXXX.setPosition(100, 750);
+ 
    
 
    
 
 
    
-   Clock clok;														// Отсчет времени
-   float dalyFrame=0;												// Счетчик прошедшего времени с момента отрисовки последнего кадра
+   
    int FPS = 0;														// Счетчик ФПС для привязки динамических событий
 
  
@@ -105,17 +103,26 @@ int main()
 
    int isMontage = 0;												// Движение корабля по стадиям 
 																	// 0 - ничего не тронуто 1 - взяли и двигаем   
-																	// 2 - пытаемся положить 3- положиль и зафиксировали
+																	// 2 - пытаемся положить 3- положить и зафиксировать
+
+   bool gorisont = true;											// Вентиль положения макета 1 - горизонтальное 0 - вертикальное
+
    bool isCorrect = true;											// Переменная для "Мы кладем корабль коррекно?
 
-   bool ShipMontage = false;										//Вентиль для открытия ручной расстановки кораблей
+   bool ShipMontage = false;										// Вентиль для открытия ручной расстановки кораблей
    
+   int MontageVariator = 0;											// Переменная для выдачи макетов установки 0=4 1,2=3 3,4,5=2 6,7,8,9 =1 10= монтаж произведен 
 
 
    int corX = 0;													// Корректировка положения корабл когда его взяли по Х
    int corY = 0;													// Корректировка положения корабл когда его взяли по У
 
-  
+   RectangleShape XXXX;												// Задаем монтажный макет
+   setQuality(XXXX, MontageVariator);								// Вызываем функцию настройки состояния
+
+   Clock clok;														// Отсчет времени
+   float dalyFrame = 0;												// Счетчик прошедшего времени с момента отрисовки последнего кадра
+
 
    while (window.isOpen())											// Главный цикл игры
    {
@@ -140,7 +147,7 @@ int main()
 			 {
 				 if (ShipMontage)									// Если вентиль монтажа кораблей открыт
 				 {
-					 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);				// Вызвать функцию движения
+					 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY,gorisont);				// Вызвать функцию движения
 				 }
 			 }
 		 }
@@ -152,7 +159,7 @@ int main()
 			 {
 				 if (ShipMontage)									// Если вентиль монтажа кораблей открыт
 				 {
-					 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);				// Вызвать функцию движения
+					 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY, gorisont);				// Вызвать функцию движения
 				 }
 			 }
 		 }
@@ -164,7 +171,7 @@ int main()
 			 {
 				 if (isMontage > 0 && ShipMontage)					// Если стадия монтажа больше 0 и вентиль монтажа кораблей открыт
 				 {
-					 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY);				// Вызвать функцию движения
+					 movedShip(event, XXXX, isMove, isMontage, isCorrect, mx, my, corX, corY, gorisont);				// Вызвать функцию движения
 				 }
 			 }
 		 }
@@ -206,47 +213,25 @@ int main()
 				 strVarPos[60].setFillColor(Color::White);
 			 }
 
-			 if (FPS % 3 > 0 && iterVar < 61)						// Если ФПС % 3  больше нуля И номер символа строки меньше 61
-			 {
-				 strVarPos[iterVar].setString(VarPos[iterVar]);		// Добавить в массив следующий символ из добовляемых
-				 iterVar++;											// Инкремировать итератор символа
-			 }
+			
 		 }
 
 		 int iter = 0;
+
 		 for (int y = 0; y < 10; y++)								// Цикл проверки полей на активность
 		 {
 			 for (int x = 0; x < 10; x++)
 			 {
-				 if (!ShipMontage) { user[y][x].ChekActiv(mx, my); }
-				
-				 oponent[y][x].ChekActiv(mx, my);
-				 
-				 if (ShipMontage)
+				 if (!ShipMontage)
+				 { 
+					 user[y][x].ChekActiv(mx, my);					// Если монтаж кораблей не происходит выполняем проверку на наличие мыши 
+				 }			
+				 if (ShipMontage)									// Если происходит монтаж
 				 {
-					user[y][x].ChekActiv(XXXX.getPosition().x-30+XXXX.getSize().x, XXXX.getPosition().y + XXXX.getSize().y / 2);
-					if(user[y][x].GetActivated()&&(x-3)>-1)
-					{
-						user[y][x - 1].SetActivated(true);
-						user[y][x - 2].SetActivated(true);
-						user[y][x - 3].SetActivated(true);
-						
-						
-					}
-					if (isMontage == 3)
-					{
-						for (int y = 0; y < 10; y++)
-						{
-							for (int x = 0; x < 10; x++)
-							{
-								if(user[y][x].GetActivated())
-								{
-									user[y][x].SetStatus(3);
-								}
-							}
-						}
-					}
+					ShipMontagePocesser(user, XXXX, gorisont, ShipMontage, isCorrect, x, y, MontageVariator, isMontage, mx, my);
 				 }
+				 oponent[y][x].ChekActiv(mx, my);					// Выполняем проверку на присутствие мыши 
+				
 			 }
 		 }
 		
@@ -294,15 +279,16 @@ int main()
 		   }
 
 			
-		   if (!Bot_AutoShip&&!ShipMontage)							// Отрисовка живого текста и меню выбора монтажа кораблей
+		   if (!Bot_AutoShip&&!ShipMontage&&MontageVariator==0)		// Отрисовка живого текста и меню выбора монтажа кораблей
 		   {
 			   for (int i = 0; i<61; i++)							// Цикл отрисовки живого текста
 			   {
 				   { window.draw(strVarPos[i]); }					// Отрисовка символов массива живого текста
 			   }
 		   }
+		  // window.draw(XXXX);
 
-		   if (ShipMontage) {window.draw(XXXX);}					// Если идет монтаж кораблей отрисовать монтажный макет
+		   
 
 		   window.display();										// Отрисовать всё вышеописанное
 
@@ -316,8 +302,16 @@ int main()
 		   FPS++;
 		   dalyFrame = 0;											// Сброс счетчика 
 		   clok.restart();										    // Перезапук времени для счетчика
+		   
+		
+		   if (iterVar < 61&& FPS % 3>0)						// Если ФПС % 3  больше нуля И номер символа строки меньше 61
+		   {
+			   strVarPos[iterVar].setString(VarPos[iterVar]);	// Добавить в массив следующий символ из добовляемых		
+			   iterVar++;										// Инкремировать итератор символа
+		   }
+			   
 
-
+		   cout << FPS << endl;
 	 
 		   
 	   }

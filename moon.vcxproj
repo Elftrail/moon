@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="chekActivBot.cpp" />
     <ClCompile Include="GenerationShip.cpp" />
+    <ClCompile Include="ShipMontageProcesser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="movedShip.cpp" />
     <ClCompile Include="Point.cpp" />
@@ -144,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="chekActivBot.h" />
     <ClInclude Include="GenerationShip.h" />
+    <ClInclude Include="ShipMontageProcesser.h" />
     <ClInclude Include="movedShip.h" />
     <ClInclude Include="setCoor.h" />
     <ClInclude Include="setQuality.h" />

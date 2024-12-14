@@ -6,17 +6,21 @@ bool activ;
 bool part;
 int size = 50;
 sf::Vector2f position;
+bool IsCorrect = true;
 
 sf::Texture ActivMissPool;
 sf::Texture ActivPool;
+sf::Texture NoCorrectActivPool;
 sf::Texture ActivPoolBang;
 sf::Texture ActivShipPool;
+sf::Texture NoCorrectActivShipPool;
 sf::Texture InvalidShipPool;
 sf::Texture NoActivMissPool;
 sf::Texture NoActivPool;
 sf::Texture NoActivPoolBang;
 sf::Texture NoActivShipPool;
 sf::Texture ValidShipPool;
+
 
 void Point::ChekActiv(int mx, int my)
 {
@@ -39,7 +43,16 @@ void Point::SetActivated(bool activated)
 {
 	activ = activated;
 	SetTextureSprite();
+	IsCorrect = true;
 }
+void Point::SetActivated(bool activated,bool isCorrect)
+{
+	activ = activated;
+	IsCorrect = isCorrect;
+	SetTextureSprite();
+}
+
+
 
 void Point::SetParty(bool party)
 {
@@ -60,12 +73,15 @@ void Point::LoadTexture()
 	
 		ActivMissPool.loadFromFile("sprits/ActivMissPool.png");
 		ActivPool.loadFromFile("sprits/ActivPool.png");
+		NoCorrectActivPool.loadFromFile("sprits/NoCorrectActivPool.png");
 		ActivPoolBang.loadFromFile("sprits/ActivPoolBang.png");
 		ActivShipPool.loadFromFile("sprits/ActivShipPool.png");
+		NoCorrectActivShipPool.loadFromFile("sprits/NoCorrectActivShipPool.png");
 		NoActivPool.loadFromFile("sprits/NoActivPool.png");
 		NoActivMissPool.loadFromFile("sprits/NoActivMissPool.png");
 		NoActivPoolBang.loadFromFile("sprits/NoActivPoolBang.png");
 		NoActivShipPool.loadFromFile("sprits/NoActivShipPool.png");
+
 
 
 }
@@ -134,6 +150,10 @@ void Point::SetTextureSprite()
 	{
 		
 		pool.setTexture(ActivShipPool);
+		if (!IsCorrect)
+		{
+			pool.setTexture(NoCorrectActivShipPool);
+		}
 	}
 	else if (Status == 2 && activ == true)
 	{
@@ -149,6 +169,10 @@ void Point::SetTextureSprite()
 	{
 		
 		pool.setTexture(ActivPool);
+		if (!IsCorrect) 
+		{
+			pool.setTexture(NoCorrectActivPool);
+		}
 	}
 	else { std::cout << "ERROR #1 mistake sprite appointment" << std::endl; }
 }

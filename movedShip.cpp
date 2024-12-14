@@ -1,6 +1,6 @@
 #include "movedShip.h"
 
-void movedShip(sf::Event& event, sf::RectangleShape& XXXX, bool& isMove, int& isMontage, bool& isCorrect, int mx, int my, int& corX, int& corY)
+void movedShip(sf::Event& event, sf::RectangleShape& XXXX, bool& isMove, int& isMontage, bool& isCorrect, int mx, int my, int& corX, int& corY, bool& Gorisont)
 {
 	int corcorX = 0;																	// доп. корректировка при повороте спрайта корабля по оси Х
 	int corcorY = 0;														   		    // доп. корректировка при повороте спрайта корабля по оси У
@@ -47,7 +47,7 @@ void movedShip(sf::Event& event, sf::RectangleShape& XXXX, bool& isMove, int& is
 
 		if (event.key.code == sf::Keyboard::R && isMontage > 0)							// Если нажимаем R - осуществляем поворот на 90 гродусов
 		{
-																						
+			Gorisont = !Gorisont;														// Переключение вентиля горизонта
 			std::cout << "R PRESS" << std::endl;										//	 
 			int Y =XXXX.getSize().x;													// Обмен длины и ширины при повороте
 			XXXX.setSize(sf::Vector2f(XXXX.getSize().y, Y));							//	

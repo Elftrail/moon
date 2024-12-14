@@ -30,6 +30,8 @@ public:
 
 	//0=NotActivated 1=Activated
 	void SetActivated(bool activated);
+	void SetActivated(bool activated, bool isCorrect);
+	
 
 	/*0 = opponent, 1= user*/
 	void SetParty(bool party);

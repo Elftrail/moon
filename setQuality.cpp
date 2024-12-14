@@ -110,3 +110,50 @@ void setQuality(Point* arr, bool par, int sizeX,int status)
 
 
 }
+void setQuality(RectangleShape& maket, int MontageVariator)
+
+{
+
+	switch (MontageVariator)
+	{
+	case 0:
+	{
+		maket.setSize(Vector2f::Vector2(200, 50));
+		maket.setPosition(750, 200);
+		cout << " case  0" << endl;
+		break;
+	}
+	case 1:
+		cout << " case  1" << endl;
+	case 2:
+	{
+		maket.setSize(Vector2f::Vector2(150, 50));
+		maket.setPosition(750, 200);
+		break;
+		cout << " case  2" << endl;
+		
+	}
+	case 3:
+		cout << " case  3" << endl;
+	case 4:
+		cout << " case  4" << endl;
+	case 5:
+	{
+		maket.setSize(Vector2f::Vector2(100, 50));
+		maket.setPosition(750, 200);
+		break;
+		cout << " case  5" << endl;
+	}
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+	{
+		maket.setSize(Vector2f::Vector2(50, 50));
+		maket.setPosition(750, 200);
+		break;
+		cout << " case  6789" << endl;
+	}
+	}
+
+}
