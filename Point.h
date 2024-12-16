@@ -43,7 +43,7 @@ public:
 
 	void LoadTexture();
 
-
+	//0=void, 1=mis, 2=hit, 3=ship
 	int GetStatus();
 	bool GetActivated();	
 	bool GetParty();

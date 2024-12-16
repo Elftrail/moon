@@ -9,6 +9,9 @@
 #include"chekActivBot.h"
 #include"movedShip.h"
 #include"ShipMontageProcesser.h"
+#include"HodUser.h"
+#include"HodOponent.h"
+
 
 using namespace std;
 using namespace sf;
@@ -20,6 +23,7 @@ using namespace sf;
 int main()
 
 {	
+	
 	setlocale(LC_ALL, "rus");
 	//declaration and initialization size arr oponent and user//
 
@@ -113,6 +117,8 @@ int main()
    
    int MontageVariator = 0;											// Переменная для выдачи макетов установки 0=4 1,2=3 3,4,5=2 6,7,8,9 =1 10= монтаж произведен 
 
+   bool GameHod = true;												// Переменная для определения хода  1 = игрок, 0 = комп.
+
 
    int corX = 0;													// Корректировка положения корабл когда его взяли по Х
    int corY = 0;													// Корректировка положения корабл когда его взяли по У
@@ -122,12 +128,16 @@ int main()
 
    Clock clok;														// Отсчет времени
    float dalyFrame = 0;												// Счетчик прошедшего времени с момента отрисовки последнего кадра
+   Clock kadry;
+   int kad = 0;
 
+   Clock TimeZad;
+   float Zaderjka=0;
 
    while (window.isOpen())											// Главный цикл игры
    {
 	   
-	   dalyFrame += clok.getElapsedTime().asMilliseconds();			// Записываем в счетчик прошедшее с момента рестарта время 
+	   dalyFrame = clok.getElapsedTime().asMilliseconds();			// Записываем в счетчик прошедшее с момента рестарта время 
 	   int my = Mouse::getPosition(window).y;						// Получаем положение мыши У
 	   int mx = Mouse::getPosition(window).x;						// Получаем положение мыши Х
 
@@ -178,9 +188,7 @@ int main()
 
 		
 		 for (int i = 0; i < 61; i++)								// Цицл установки знач. отр. живого текста первого меню
-
 		 {
-
 			 if (chekActivBot(mx, my, BotYas))
 			 {
 				 strVarPos[53].setFillColor(Color::Red);
@@ -203,8 +211,8 @@ int main()
 				 {
 					 Bot_AutoShip = true;
 					 GenerationShip(user);
+					 MontageVariator = 10;
 				 }
-
 			 }
 			 else
 			 {
@@ -212,12 +220,7 @@ int main()
 				 strVarPos[59].setFillColor(Color::White);
 				 strVarPos[60].setFillColor(Color::White);
 			 }
-
-			
 		 }
-
-		 int iter = 0;
-
 		 for (int y = 0; y < 10; y++)								// Цикл проверки полей на активность
 		 {
 			 for (int x = 0; x < 10; x++)
@@ -228,28 +231,53 @@ int main()
 				 }			
 				 if (ShipMontage)									// Если происходит монтаж
 				 {
-					ShipMontagePocesser(user, XXXX, gorisont, ShipMontage, isCorrect, x, y, MontageVariator, isMontage, mx, my);
+					ShipMontagePocesser(user, XXXX, gorisont, ShipMontage, isCorrect, x, y, MontageVariator, isMontage, mx, my); // Вызываем функцию монтажа
 				 }
 				 oponent[y][x].ChekActiv(mx, my);					// Выполняем проверку на присутствие мыши 
-				
+				 
+				 if(oponent[y][x].GetActivated()&&MontageVariator==10&&GameHod)			// Если клетка противника активна, и монтаж кораблей завершен, и ход игрока
+				 {
+					 HodUser(oponent, event, GameHod, y, x, isMontage);					// Вызываем ход игрока
+				 }
+
 			 }
 		 }
-		
+	   }
+	   Zaderjka = TimeZad.getElapsedTime().asMilliseconds();		// Присваиваем задержке прошедшее время с начала таймера в мс					
+	   if (!GameHod && MontageVariator == 10)						// Если ход противника и монтаж кораблей завершен
+	   {
+		  
+		  if (Zaderjka > 1550)										// Если прошло 	более1550 мс						
+		  {
+			  Zaderjka = 0;											// Обнуляем задержку
+			  TimeZad.restart();									// Обнуляем таймер
+		  }
+
+		  if (Zaderjka > 1500)										// Если задержка более 1500 мс
+		  {
+			  TimeZad.restart();									// Обнуляем таймер
+			  HodOponent(user, event, GameHod, isMontage);			// Вызываем функцию хода противника
 
 
+		  }
+
+
+
+
+		  
 	   }
 
 	   
 	   
+	  
 	
-	
-	   if (dalyFrame > 20000)										// Если прошло более 20к милисекунд - отрисовка кадра (20к = +- 60 ФПС)		
+	   if (dalyFrame > 15)											// Если прошло более 20к милисекунд - отрисовка кадра (20к = +- 60 ФПС)		
 	   {
 		   if (FPS == 60) { FPS = 0; }								// Если отрисовали 60 кадров - сбрасывам счетчик		
 
-		   window.clear(Color::Black);
+		   window.clear(Color::Black);								// Очищаем окно
 
-		   window.draw(sFon);
+		   window.draw(sFon);										// Выводим фон
 
 
 
@@ -286,34 +314,25 @@ int main()
 				   { window.draw(strVarPos[i]); }					// Отрисовка символов массива живого текста
 			   }
 		   }
-		  // window.draw(XXXX);
-
-		   
-
 		   window.display();										// Отрисовать всё вышеописанное
-
+		   
 
 
 		
 		 
 
 
-
+		   kad++;
 		   FPS++;
 		   dalyFrame = 0;											// Сброс счетчика 
 		   clok.restart();										    // Перезапук времени для счетчика
-		   
+		  // if (kadry.getElapsedTime().asSeconds() > 1) { cout << "FPS == " << kad << endl; kadry.restart(); kad = 0; }
 		
-		   if (iterVar < 61&& FPS % 3>0)						// Если ФПС % 3  больше нуля И номер символа строки меньше 61
+		   if (iterVar < 61&& FPS % 3>0)							// Если ФПС % 3  больше нуля И номер символа строки меньше 61
 		   {
-			   strVarPos[iterVar].setString(VarPos[iterVar]);	// Добавить в массив следующий символ из добовляемых		
-			   iterVar++;										// Инкремировать итератор символа
+			   strVarPos[iterVar].setString(VarPos[iterVar]);		// Добавить в массив следующий символ из добовляемых		
+			   iterVar++;											// Инкремировать итератор символа
 		   }
-			   
-
-		   cout << FPS << endl;
-	 
-		   
 	   }
    }
 	
