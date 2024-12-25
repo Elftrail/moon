@@ -3,7 +3,8 @@
 sf::Sprite pool;
 int Status;
 bool activ;
-bool part;
+//0- опонент 1-игрок
+bool part; 
 int size = 50;
 sf::Vector2f position;
 bool IsCorrect = true;
@@ -141,12 +142,17 @@ void Point::SetTextureSprite()
 		
 		pool.setTexture(NoActivPoolBang);
 	}
-	else if (Status == 3 && activ == false)
+	else if (Status == 3 && activ == false&&part)
 	{
 		
 		pool.setTexture(NoActivShipPool);
 	}
-	else if (Status == 3 && activ == true)
+	else if (Status == 3 && activ == false && !part)
+	{
+
+		pool.setTexture(NoActivPool);
+	}
+	else if (Status == 3 && activ == true && part)
 	{
 		
 		pool.setTexture(ActivShipPool);
@@ -154,6 +160,12 @@ void Point::SetTextureSprite()
 		{
 			pool.setTexture(NoCorrectActivShipPool);
 		}
+	}
+	else if (Status == 3 && activ == true && !part)
+	{
+
+		pool.setTexture(ActivPool);
+		
 	}
 	else if (Status == 2 && activ == true)
 	{

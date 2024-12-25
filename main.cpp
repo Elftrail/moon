@@ -340,7 +340,7 @@ int main()
 		   FPS++;
 		   dalyFrame = 0;											// Сброс счетчика 
 		   clok.restart();										    // Перезапук времени для счетчика
-		  // if (kadry.getElapsedTime().asSeconds() > 1) { cout << "FPS == " << kad << endl; kadry.restart(); kad = 0; }
+		   if (kadry.getElapsedTime().asSeconds() > 1) { cout << "FPS == " << kad << endl; kadry.restart(); kad = 0; }
 		
 		   if (iterVar < 61&& FPS % 3>0)							// Если ФПС % 3  больше нуля И номер символа строки меньше 61
 		   {
