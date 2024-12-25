@@ -22,17 +22,17 @@ using namespace sf;
 
 int main()
 
-{	
-	
+{
+
 	setlocale(LC_ALL, "rus");
 	//declaration and initialization size arr oponent and user//
 
 	const int sArr = 10;//size arr pools (const=10)
-	
+
 	//declaration and initialization dynamic arr oponent//
-	
+
 	Point** oponent = { new Point * [sArr] {} };
-	for (int  i = 0; i < sArr; i++)
+	for (int i = 0; i < sArr; i++)
 	{
 		oponent[i] = new Point[sArr]{};
 	}
@@ -45,94 +45,108 @@ int main()
 	}
 
 	//Quality setting to an pools user and oponent//
-	setQuality(oponent, false,sArr,sArr);
+	setQuality(oponent, false, sArr, sArr);
 	setQuality(user, true, sArr, sArr);
 
 	//generation ships oponent
 	GenerationShip(oponent);
-	
+
 
 	//Declaration Window//
 	RenderWindow window(VideoMode(1350, 850), "looock! this is Saylor Moon!!!!");
 
 	//Declaration and initialization back space image//
-   Texture Fon;
-   Sprite sFon;
-   Fon.loadFromFile("sprits/Fon.png");
-   sFon.setTexture(Fon);
-  
-   //Declaration Fonts//
-   Font font;
-   font.loadFromFile("Text.ttf");
- 
-   //Bref coor pool and set
-   Text numerationNUM[2];
-   Text numerationLIT[10][2];
-   setCoor(numerationLIT, numerationNUM, font);
+	Texture Fon;
+	Sprite sFon;
+	Fon.loadFromFile("sprits/Fon.png");
+	sFon.setTexture(Fon);
 
-   //breef text var of set ship
-   Text strVarPos [62];
-   for (int i = 0; i < 62; i++) 
-   {
-	   strVarPos[i].setFont(font);
-	   strVarPos[i].setPosition(40+20*i, 750);
-   }
-   String VarPos (L"т-щ капитан! изволите сами заняться боевым порядком? да / нет");
+	//Declaration Fonts//
+	Font font;
+	font.loadFromFile("Text.ttf");
 
-   RectangleShape BotYas;
-   BotYas.setPosition(1090, 750);
-   BotYas.setSize(Vector2f::Vector2(60, 35));
+	//Bref coor pool and set
+	Text numerationNUM[2];
+	Text numerationLIT[10][2];
+	setCoor(numerationLIT, numerationNUM, font);
 
-   RectangleShape BotNo;
-   BotNo.setPosition(1190, 750);
-   BotNo.setSize(Vector2f::Vector2(80, 35));
+	//breef text var of set ship
+	Text strVarPos[62];
+	for (int i = 0; i < 62; i++)
+	{
+		strVarPos[i].setFont(font);
+		strVarPos[i].setPosition(40 + 20 * i, 750);
+	}
+	String VarPos(L"т-щ капитан! изволите сами заняться боевым порядком? да / нет");
 
- 
-   
+	RectangleShape BotYas;
+	BotYas.setPosition(1090, 750);
+	BotYas.setSize(Vector2f::Vector2(60, 35));
 
-   
+	RectangleShape BotNo;
+	BotNo.setPosition(1190, 750);
+	BotNo.setSize(Vector2f::Vector2(80, 35));
 
 
-   
-   
-   int FPS = 0;														// Счетчик ФПС для привязки динамических событий
-
- 
-   int iterVar=0;													// Счетчик для перебора массива при выводе живого текста первого меню										
-
-   bool Bot_AutoShip = false;										// Вентиль кнопки автомонтажа кораблей в меню
-
-   bool isMove = false;												// Переменная-вентиль для перетаскивания корабля
-   bool pressR = false;												// Переменная для отслеживания R и поворота корабля
-
-   int isMontage = 0;												// Движение корабля по стадиям 
-																	// 0 - ничего не тронуто 1 - взяли и двигаем   
-																	// 2 - пытаемся положить 3- положить и зафиксировать
-
-   bool gorisont = true;											// Вентиль положения макета 1 - горизонтальное 0 - вертикальное
-
-   bool isCorrect = true;											// Переменная для "Мы кладем корабль коррекно?
-
-   bool ShipMontage = false;										// Вентиль для открытия ручной расстановки кораблей
-   
-   int MontageVariator = 0;											// Переменная для выдачи макетов установки 0=4 1,2=3 3,4,5=2 6,7,8,9 =1 10= монтаж произведен 
-
-   bool GameHod = true;												// Переменная для определения хода  1 = игрок, 0 = комп.
 
 
-   int corX = 0;													// Корректировка положения корабл когда его взяли по Х
-   int corY = 0;													// Корректировка положения корабл когда его взяли по У
 
-   RectangleShape XXXX;												// Задаем монтажный макет
-   setQuality(XXXX, MontageVariator);								// Вызываем функцию настройки состояния
 
-   Clock clok;														// Отсчет времени
-   float dalyFrame = 0;												// Счетчик прошедшего времени с момента отрисовки последнего кадра
-   Clock kadry;
-   int kad = 0;
 
-   Clock TimeZad;
-   float Zaderjka=0;
+
+
+	int FPS = 0;														// Счетчик ФПС для привязки динамических событий
+
+
+	int iterVar = 0;													// Счетчик для перебора массива при выводе живого текста первого меню										
+
+	bool Bot_AutoShip = false;										// Вентиль кнопки автомонтажа кораблей в меню
+
+	bool isMove = false;												// Переменная-вентиль для перетаскивания корабля
+	bool pressR = false;												// Переменная для отслеживания R и поворота корабля
+
+	int isMontage = 0;												// Движение корабля по стадиям 
+	// 0 - ничего не тронуто 1 - взяли и двигаем   
+	// 2 - пытаемся положить 3- положить и зафиксировать
+
+	bool gorisont = true;											// Вентиль положения макета 1 - горизонтальное 0 - вертикальное
+
+	bool isCorrect = true;											// Переменная для "Мы кладем корабль коррекно?
+
+	bool ShipMontage = false;										// Вентиль для открытия ручной расстановки кораблей
+
+	int MontageVariator = 0;											// Переменная для выдачи макетов установки 0=4 1,2=3 3,4,5=2 6,7,8,9 =1 10= монтаж произведен 
+
+	bool GameHod = true;												// Переменная для определения хода  1 = игрок, 0 = комп.
+
+
+	int corX = 0;													// Корректировка положения корабл когда его взяли по Х
+	int corY = 0;													// Корректировка положения корабл когда его взяли по У
+
+	RectangleShape XXXX;												// Задаем монтажный макет
+	setQuality(XXXX, MontageVariator);								// Вызываем функцию настройки состояния
+
+	Clock clok;														// Отсчет времени
+	float dalyFrame = 0;												// Счетчик прошедшего времени с момента отрисовки последнего кадра
+	Clock kadry;
+	int kad = 0;
+
+	Clock TimeZad;													// Время для задержки хода противника
+	float Zaderjka = 0;												// Вентиль для задержки хода противника
+		
+	int Global_Deadh[20];											// Массив координат начала утопленных кораблей
+	for (int i = 0; i < 20; i++) 
+	{
+		Global_Deadh[i] = -1;
+	}
+	
+
+	int After_Bang[9];
+	for (int i = 0; i < 9; i++)
+	{
+		After_Bang[i] = -1;
+	}
+
 
    while (window.isOpen())											// Главный цикл игры
    {
@@ -256,7 +270,7 @@ int main()
 		  if (Zaderjka > 1500)										// Если задержка более 1500 мс
 		  {
 			  TimeZad.restart();									// Обнуляем таймер
-			  HodOponent(user, event, GameHod, isMontage);			// Вызываем функцию хода противника
+			 HodOponent(user, event, GameHod, isMontage, Global_Deadh, After_Bang);			// Вызываем функцию хода противника
 
 
 		  }
