@@ -1,7 +1,7 @@
 #include "HodUSer.h"
 
 
-void HodUser(Point**oponent, sf::Event& event, bool& GameHod, int y, int x, int &isMontage)
+void HodUser(Point**oponent, sf::Event& event, bool& GameHod, int y, int x, int &isMontage,int* Global_DaedhUser)
 {
 	if (GameHod) 
 	{
@@ -34,6 +34,17 @@ void HodUser(Point**oponent, sf::Event& event, bool& GameHod, int y, int x, int 
 						{
 							for (int X = 0; X < 10; X++)
 							{
+								int CONTI = 0;
+								for (int i = 0; i < 20; i++)
+								{
+									if (Global_DaedhUser[i] == Y && Global_DaedhUser[i + 1] == X)
+									{
+										CONTI++;
+										break;
+									}
+								}
+								if (CONTI > 0) { CONTI = 0; cout << "пропущен обсчет User" << endl; continue; }
+
 								int YY = 0;
 								int YYSCHET = 0;
 								int XX = 0;
@@ -131,6 +142,16 @@ void HodUser(Point**oponent, sf::Event& event, bool& GameHod, int y, int x, int 
 										}
 										if (YY == 0 && XX == 0)
 										{
+											for (int i = 0; i < 20; i++)
+											{
+												if (Global_DaedhUser[i] == -1)
+												{
+													Global_DaedhUser[i] = Y;
+													Global_DaedhUser[i + 1] = X;
+
+													break;
+												}
+											}
 											cout << "Вложеный опрос завершен с кодом 00 - требуется обсчет мисов вокруг корабля"  << endl;
 											
 											if (YYSCHET > 0) 

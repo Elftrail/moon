@@ -1,6 +1,7 @@
 #include "Point.h"
 
 sf::Sprite pool;
+
 int Status;
 bool activ;
 //0- опонент 1-игрок
@@ -8,17 +9,22 @@ bool part;
 int size = 50;
 sf::Vector2f position;
 bool IsCorrect = true;
+bool Animation= false;
 
 sf::Texture ActivMissPool;
+sf::Texture ActivMissPoolAnimation;
 sf::Texture ActivPool;
 sf::Texture NoCorrectActivPool;
 sf::Texture ActivPoolBang;
+sf::Texture ActivPoolBangAnimation;
 sf::Texture ActivShipPool;
 sf::Texture NoCorrectActivShipPool;
 sf::Texture InvalidShipPool;
 sf::Texture NoActivMissPool;
+sf::Texture NoActivMissPoolAnimation;
 sf::Texture NoActivPool;
 sf::Texture NoActivPoolBang;
+sf::Texture NoActivPoolBangAnimation;
 sf::Texture NoActivShipPool;
 sf::Texture ValidShipPool;
 
@@ -38,6 +44,14 @@ void Point::SetStatus(int status_pool)
 
 	Status = status_pool;
 	SetTextureSprite();
+}
+
+void  Point::SetAnimation(bool Anim) 
+{
+	Animation = Anim;
+	
+		SetTextureSprite();
+
 }
 
 void Point::SetActivated(bool activated)
@@ -83,8 +97,10 @@ void Point::LoadTexture()
 		NoActivPoolBang.loadFromFile("sprits/NoActivPoolBang.png");
 		NoActivShipPool.loadFromFile("sprits/NoActivShipPool.png");
 
-
-
+		ActivMissPoolAnimation.loadFromFile("sprits/ActivMissPoolAnimation.png");
+		ActivPoolBangAnimation.loadFromFile("sprits/ActivPoolBangAnimation.png");
+		NoActivMissPoolAnimation.loadFromFile("sprits/NoActivMissPoolAnimation.png");
+		NoActivPoolBangAnimation.loadFromFile("sprits/NoActivPoolBangAnimation.png");
 }
 
 int Point::GetStatus()
@@ -134,13 +150,14 @@ void Point::SetTextureSprite()
 	}
 	else if (Status == 1 && activ == false)
 	{
-		
-		pool.setTexture(NoActivMissPool);
+		if (!Animation){pool.setTexture(NoActivMissPool);}
+		if (Animation) {pool.setTexture(NoActivMissPoolAnimation);}
 	}
 	else if (Status == 2 && activ == false)
 	{
 		
-		pool.setTexture(NoActivPoolBang);
+		if (!Animation) {pool.setTexture(NoActivPoolBang);}
+		if (Animation) { pool.setTexture(NoActivPoolBangAnimation); }
 	}
 	else if (Status == 3 && activ == false&&part)
 	{
@@ -170,12 +187,14 @@ void Point::SetTextureSprite()
 	else if (Status == 2 && activ == true)
 	{
 		
-		pool.setTexture(ActivPoolBang);
+		if (!Animation) { pool.setTexture(ActivPoolBang); }
+		if (Animation) { pool.setTexture(ActivPoolBangAnimation); }
 	}
 	else if (Status == 1 && activ == true)
 	{
 		
-		pool.setTexture(ActivMissPool);
+		if (!Animation) { pool.setTexture(ActivMissPool); }
+		if (Animation) { pool.setTexture(ActivMissPoolAnimation); }
 	}
 	else if (Status == 0 && activ == true)
 	{

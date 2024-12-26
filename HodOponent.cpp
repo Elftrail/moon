@@ -97,7 +97,7 @@ void after_bang(int Y, int X, int* After_Bang, Point** user, int& bangY,int& ban
 			// опрос по X
 			if (prox_plus && user[After_Bang[3]][After_Bang[4]+1].GetStatus() == 1 ||!prox_plus)
 			{
-				if (proy_minus && user[After_Bang[3]][After_Bang[4]-1].GetStatus() == 1 || !prox_minus)
+				if (prox_minus && user[After_Bang[3]][After_Bang[4]-1].GetStatus() == 1 || !prox_minus)
 				{
 					After_Bang[1] = 2;
 					cout << " Ось стрельбы установлена по Y " << endl;
@@ -552,9 +552,13 @@ void after_bang(int Y, int X, int* After_Bang, Point** user, int& bangY,int& ban
 
 }
 
-int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, int* Global_Daedh,int* After_Bang)
+int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, int* Global_Daedh,int* After_Bang, int* PrevBangOp)
 {
-	
+			
+	for (int i = 0; i < 4; i++)						// Записываем в строку состояния выстрела
+	{
+		PrevBangOp[i] = -1;
+	}												
 	if (!GameHod)									// Если ход противника
 	{
 		bool restart;								// Обьявляем переменную рестарта
@@ -588,15 +592,23 @@ int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, in
 			{
 				user[bangY][bangX].SetStatus(1);	// Записываем в клетку "Мимо"	
 				GameHod = !GameHod;					// Переводим ход к игроку
+				PrevBangOp[0] = bangY;				// Записываем в строку состояния выстрела 
+				PrevBangOp[1] = bangX;				//
+				PrevBangOp[2] = 0;					//
+				PrevBangOp[3] = 0;					//
 				break;								// Выпадаем из свича
 
 			}
 			case 3:									// Если в клетке корабль
 			{
-				After_Bang[0] = 1;
-				After_Bang[3] = bangY;
-				After_Bang[4] = bangX;
+				After_Bang[0] = 1;					// Активация ИИ противника	
+				After_Bang[3] = bangY;				// запись в значений выстрела по У
+				After_Bang[4] = bangX;				// И по Х тоже
 
+				PrevBangOp[0] = bangY;				// Записываем в строку состояния выстрела 
+				PrevBangOp[1] = bangX;				//
+				PrevBangOp[2] = 1;					//
+				PrevBangOp[3] = 0;					//
 
 
 				user[bangY][bangX].SetStatus(2);	// Записываем в клетку попадание
@@ -620,11 +632,11 @@ int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, in
 						if (CONTI > 0) { CONTI = 0; cout << "пропущен обсчет" << endl; continue; }
 
 
-						int YY = 0;					// Преременная для кода завершения опроса 
-						int YYSCHET = 0;			// Преременная- счетчик для кода завершения опроса 
-						int XX = 0;					// Преременная для кода завершения опроса 
-						int XXSCHET = 0;			// Преременная- счетчик для кода завершения опроса
-						if (user[Y][X].GetStatus() == 2)                                                     // Если натыкаемся на ХИТ
+						int YY = 0;																			// Преременная для кода завершения опроса 
+						int YYSCHET = 0;																	// Преременная- счетчик для кода завершения опроса 
+						int XX = 0;																			// Преременная для кода завершения опроса 
+						int XXSCHET = 0;																	// Преременная- счетчик для кода завершения опроса
+						if (user[Y][X].GetStatus() == 2)                                                    // Если натыкаемся на ХИТ
 						{
 							bool cherprev = true;															// Инициализируем проверку Клеток пред обрабатываемой 
 							if (Y - 1 > -1)																	// Если не вываливаемся за границу
@@ -694,6 +706,8 @@ int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, in
 								}
 								if (YY == 0 && XX == 0)																		// Если обход завершен с кодом 00
 								{
+									PrevBangOp[3] = 1;					//Записываем затопление корабля
+
 									After_Bang[0] = -1;
 									for (int i = 0; i < 20; i++)
 									{
@@ -775,6 +789,7 @@ int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, in
 
 
 	}
+	
 	if (After_Bang[0] == -1)
 	{
 		cout << " Корабль затоплен . Состояние AFTER BANG : " << endl;
@@ -785,6 +800,6 @@ int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, in
 		}
 		cout << endl;
 	}
-		return 0;
+		return 1;
 	}
 

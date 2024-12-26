@@ -12,4 +12,4 @@ using namespace sf;
 using namespace std;
 
 
-void HodUser(Point**user, sf::Event& event, bool& GameHod,int y, int x,int &isMontage);
+void HodUser(Point**user, sf::Event& event, bool& GameHod,int y, int x,int &isMontage, int* Global_DaedhUser);

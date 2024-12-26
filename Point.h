@@ -9,6 +9,7 @@ class Point
 	bool part;
 	int size = 50;
 	sf::Vector2f position;
+	bool Animation = false;
 
 	sf::Texture ActivMissPool;
 	sf::Texture ActivPool;
@@ -21,12 +22,18 @@ class Point
 	sf::Texture NoActivShipPool;
 	sf::Texture ValidShipPool;
 
+	sf::Texture ActivMissPoolAnimation;
+	sf::Texture ActivPoolBangAnimation;
+	sf::Texture NoActivMissPoolAnimation;
+	sf::Texture NoActivPoolBangAnimation;
+
 public:
 	//Chek Activity from Mouse (mouse x, mouse,y)
 	void ChekActiv(int mx, int my);
 
 	//0=void, 1=mis, 2=hit, 3=ship
 	void SetStatus(int status_pool);
+	void SetAnimation(bool Animation);
 
 	//0=NotActivated 1=Activated
 	void SetActivated(bool activated);
