@@ -93,12 +93,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\SFML-2.6.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d:\SFML-2.6.2\lib\vorbisfile.lib;d:\SFML-2.6.2\lib\vorbisenc.lib;d:\SFML-2.6.2\lib\vorbis.lib;d:\SFML-2.6.2\lib\sfml-window-d.lib;d:\SFML-2.6.2\lib\sfml-system-d.lib;d:\SFML-2.6.2\lib\sfml-network-d.lib;d:\SFML-2.6.2\lib\sfml-main-d.lib;d:\SFML-2.6.2\lib\sfml-graphics-d.lib;d:\SFML-2.6.2\lib\sfml-audio-d.lib;d:\SFML-2.6.2\lib\sfml-audio.lib;d:\SFML-2.6.2\lib\openal32.lib;d:\SFML-2.6.2\lib\ogg.lib;d:\SFML-2.6.2\lib\freetype.lib;d:\SFML-2.6.2\lib\flac.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\SFML-2.6.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

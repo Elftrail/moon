@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include<SFML/Audio.hpp>
 #include<iostream>
 #include<ctime>
 #include<chrono>
@@ -65,31 +66,15 @@ int main()
 	Font font;
 	font.loadFromFile("Text.ttf");
 
-	//Bref coor pool and set
-	Text numerationNUM[2];
-	Text numerationLIT[10][2];
-	setCoor(numerationLIT, numerationNUM, font);
-
-	//breef text var of set ship
-	Text strVarPos[62];
-	for (int i = 0; i < 62; i++)
-	{
-		strVarPos[i].setFont(font);
-		strVarPos[i].setPosition(40 + 20 * i, 750);
-	}
 	String VarPos(L"т-щ капитан! изволите сами заняться боевым порядком? да / нет");
-	String SHodOp[4];
-	SHodOp[0] = {L"Ход противника 3	 " };
-	SHodOp[1] = {L"Ход противника 2	 " };
-	SHodOp[2] = {L"Ход противника 1	 " };
-	SHodOp[3] = {L"Ход противника  " };  //0-14 - Ход противника//15-3 16-2 17-1 18-" "19-20 YX
-
+	String SHodOp(L"Ход противника");
 	String MorBo(L"морской бой");
 	String fail(L"Поражение");
 	String Win(L"Победа!!!");
-	
 	String SBotContinue(L"Продолжить?");
 	String SHodUs(L"ваш ход");
+
+
 
 	Text MorBoy;
 	MorBoy.setString(MorBo);
@@ -105,11 +90,25 @@ int main()
 	Text  HodOp;
 	HodOp.setFont(font);
 	HodOp.setPosition(100, 750);
+	HodOp.setString(SHodOp);
 	
 	Text  BotContinueText;
 	BotContinueText.setFont(font);
 	BotContinueText.setPosition(450, 750);
 	BotContinueText.setString(SBotContinue);
+	
+	Text strVarPos[62];
+	for (int i = 0; i < 62; i++)
+	{
+		strVarPos[i].setFont(font);
+		strVarPos[i].setPosition(40 + 20 * i, 750);
+	}
+
+	Text numerationNUM[2];
+	Text numerationLIT[10][2];
+	setCoor(numerationLIT, numerationNUM, font);
+	
+	
 	RectangleShape BotContinue;
 	BotContinue.setPosition(450, 750);
 	BotContinue.setSize(Vector2f::Vector2(100, 35));
@@ -124,8 +123,43 @@ int main()
 	BotNo.setPosition(1190, 750);
 	BotNo.setSize(Vector2f::Vector2(80, 35));
 
+	SoundBuffer S_BUFFER[7];
+	for (int i = 0; i < 7; i++) 
+	{
+		switch (i)
+		{
+		case 0:
+			S_BUFFER[i].loadFromFile("sound/Activ.mp3 ");
+			break;
+		case 1:
+			S_BUFFER[i].loadFromFile("sound/BotonPress.mp3 ");
+			break;
+		case 2:
+				S_BUFFER[i].loadFromFile("sound/Fail.mp3 ");
+				break; 
+		case 3:
+					S_BUFFER[i].loadFromFile("sound/Hit.mp3 ");
+					break; 
+		case 4:
+						S_BUFFER[i].loadFromFile("sound/Mis.mp3 ");
+						break; 
+		case 5:
+							S_BUFFER[i].loadFromFile("sound/shipDeadh.mp3 ");
+							break; 
+		case 6:
+		S_BUFFER[i].loadFromFile("sound/Win.mp3 ");
+								break;
 
-
+		default:
+			break;
+		}
+	}
+	Sound SOUND[7];
+	for (int i = 0; i < 7; i++)
+	{
+	SOUND[i].setBuffer(S_BUFFER[i]);
+	}
+	SOUND[4].setVolume(30);
 
 
 
@@ -175,15 +209,21 @@ int main()
 	Clock TimeZad;													// Время для задержки хода противника
 	float Zaderjka = 0;												// Вентиль для задержки хода противника
 		
-	int Global_Deadh[20];											// Массив координат начала утопленных кораблей user
-	int Global_DeadhUser[20];										// Массив координат начала утопленных кораблей op
-	for (int i = 0; i < 20; i++) 
+	int Global_Deadh[10][2];											// Массив координат начала утопленных кораблей user
+	int Global_DeadhUser[10][2];										// Массив координат начала утопленных кораблей op
+	for (int i = 0; i < 10; i++) 
 	{
-		Global_Deadh[i] = -1;
+		for (int j = 0; j < 2; j++)
+		{
+			Global_Deadh[i][j] = -1;
+		}
 	}
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		Global_DeadhUser[i] = -1;
+		for (int j = 0; j < 2; j++)
+		{
+			Global_DeadhUser[i][j] = -1;
+		}
 	}
 
 
@@ -196,11 +236,11 @@ int main()
 
 	while (window.isOpen())											// Главный цикл игры
 	{
-		if (Global_Deadh[19] != -1 && Global_DeadhUser[19] == -1)
+		if (Global_Deadh[9][0] != -1 && Global_DeadhUser[9][0] == -1)
 		{
 			MontageVariator = 11; // fail
 		}
-		if (Global_Deadh[19] == -1 && Global_DeadhUser[19] != -1)
+		if (Global_Deadh[9][0] == -1 && Global_DeadhUser[9][0] != -1)
 		{
 			MontageVariator = 12; // Win
 		}
@@ -256,20 +296,10 @@ int main()
 
 			if (!GameHod && MontageVariator == 10)
 			{
-				if (chekActivBot(mx, my, BotContinue))
-				{
-					BotContinueText.setFillColor(Color::Yellow);
-					if (Mouse::isButtonPressed(Mouse::Left))
-					{
-						// GameContinue = true;
-					}
-
-				}
 				if (!chekActivBot(mx, my, BotContinue))
 				{
 					BotContinueText.setFillColor(Color::White);
 				}
-
 			}
 
 			for (int i = 0; i < 61; i++)								// Цицл установки знач. отр. живого текста первого меню
@@ -322,7 +352,7 @@ int main()
 
 					if (oponent[y][x].GetActivated() && MontageVariator == 10 && GameHod)			// Если клетка противника активна, и монтаж кораблей завершен, и ход игрока
 					{
-						HodUser(oponent, event, GameHod, y, x, isMontage,Global_DeadhUser);					// Вызываем ход игрока
+						HodUser(oponent, event, GameHod, y, x, isMontage,Global_DeadhUser,SOUND);					// Вызываем ход игрока
 					}
 
 
@@ -335,7 +365,7 @@ int main()
 	
 		if (Animation == 1)
 		{
-			if (ZadAnimation > 2800)
+			if (ZadAnimation > 1800)
 			{
 				ZadAnimation = 0;
 				TimeAnimation.restart();
@@ -347,28 +377,24 @@ int main()
 				{
 					user[PrevBangOp[0]][PrevBangOp[1]].SetAnimation(true);
 				}
-				if (ZadAnimation > 500 && ZadAnimation < 900)
+				if (ZadAnimation > 300 && ZadAnimation < 600)
 				{
 					user[PrevBangOp[0]][PrevBangOp[1]].SetAnimation(false);
 				}
-				if (ZadAnimation > 900 && ZadAnimation < 1300)
+				if (ZadAnimation > 600 && ZadAnimation < 900)
 				{
 					user[PrevBangOp[0]][PrevBangOp[1]].SetAnimation(true);
 				}
-				if (ZadAnimation > 1300 && ZadAnimation < 1800)
+				if (ZadAnimation > 900 && ZadAnimation < 1200)
 				{
 					user[PrevBangOp[0]][PrevBangOp[1]].SetAnimation(false);
 				}
-				if (ZadAnimation > 1800 && ZadAnimation < 2200)
+				if (ZadAnimation > 1200 && ZadAnimation < 1500)
 				{
 					user[PrevBangOp[0]][PrevBangOp[1]].SetAnimation(true);
 				}
-				if (ZadAnimation > 2200)
+				if (ZadAnimation > 1500)
 				{
-				//	user[PrevBangOp[0]][PrevBangOp[1]].SetAnimation(false);
-				//}
-				//if (ZadAnimation > 2600) 
-				//{
 					user[PrevBangOp[0]][PrevBangOp[1]].SetAnimation(false);
 					Animation = 0;
 				}
@@ -379,16 +405,16 @@ int main()
 
 		if (!GameHod && MontageVariator == 10)						// Если ход противника и монтаж кораблей завершен
 		{
-			if (Zaderjka > 3002)										// Если прошло 	более3050 мс						
+			if (Zaderjka > 10)//)										// Если прошло 	более3050 мс						
 			{
-				Zaderjka = 0;											// Обнуляем задержку
+				Zaderjka = 0;										// Обнуляем задержку
 				TimeZad.restart();									// Обнуляем таймер
 
 			}
-			if (Zaderjka > 3000 && Zaderjka)									// Если задержка более 3000 мс
+			if (Zaderjka >2)// 2000 )								// Если задержка более 3000 мс
 			{
 				TimeZad.restart();								// Обнуляем таймер
-				Animation=HodOponent(user, event, GameHod, isMontage, Global_Deadh, After_Bang, PrevBangOp);			// Вызываем функцию хода противника
+				Animation=HodOponent(user, event, GameHod, isMontage, Global_Deadh, After_Bang, PrevBangOp,SOUND);			// Вызываем функцию хода противника
 				VENTBotContinue = true;
 			}
 
@@ -453,32 +479,12 @@ int main()
 		   }
 		   if (!GameHod && MontageVariator == 10)					// Если ход противника и монтаж завершен
 		   {
-			   if (VENTBotContinue)
-			   {
-				   SHodOp[3][15] = ' ';
-			   }
-			   if (Zaderjka < 1000)
-			   {
-				   SHodOp[3][15] = '3';
-			   }
-			   if (Zaderjka > 1000&& Zaderjka < 2000)
-			   {
-				   SHodOp[3][15] = '2';
-			   }
-			   if (Zaderjka > 2000 && Zaderjka < 3000)
-			   {
-				   SHodOp[3][15] = '1';
-			   }
-			   
-			   HodOp.setString(SHodOp[3]);
-
-			  
 			   window.draw(HodOp);									// Написать строку с учетом состояния хода
 		   }
 
 
 		   if(MontageVariator<11){ window.draw(MorBoy); }
-		   if (MontageVariator == 11) { MorBoy.setString(fail); MorBoy.setPosition(490,20); window.draw(MorBoy); }
+		   if (MontageVariator == 11) { MorBoy.setString(fail); MorBoy.setPosition(450,20); window.draw(MorBoy); }
 		   if (MontageVariator == 12) { MorBoy.setString(Win); MorBoy.setPosition(470, 20); window.draw(MorBoy); }
 		   
 		
@@ -506,7 +512,7 @@ int main()
 		   dalyFrame = 0;											// Сброс счетчика 
 		   clok.restart();										    // Перезапук времени для счетчика
 		   if (kadry.getElapsedTime().asSeconds() > 1) { cout << "FPS == " << kad << endl; kadry.restart(); kad = 0; }
-		
+
 		   if (iterVar < 61&& FPS % 3>0)							// Если ФПС % 3  больше нуля И номер символа строки меньше 61
 		   {
 			   strVarPos[iterVar].setString(VarPos[iterVar]);		// Добавить в массив следующий символ из добовляемых		
