@@ -1,4 +1,5 @@
 #pragma once
+
 #include<iostream>
 #include<SFML/Graphics.hpp>
 #include"Point.h"
@@ -7,4 +8,4 @@
 using namespace sf;
 
 //Функция для вычислений при расстановка кораблей
-void ShipMontagePocesser(Point** user, RectangleShape& XXXX, bool& gorisont, bool& ShipMontage, bool& isCorrect, int x, int y, int& MontageVariator, int& isMontage, int mx, int my);
+void MontageShip_2 (Point** user, bool& gorisont, bool& ShipMontage, bool& isCorrect, int x, int y, int& MontageVariator, int& StadyMontage);

@@ -29,11 +29,11 @@ void after_bang(int Y, int X, int* After_Bang, Point** user, int& bangY,int& ban
 
 	//cout << " Старт обработки следуещего хода противника ";
 	//cout << " с кодом After_Bang : " << endl;
-	for (int i = 0; i < 9; i++)
+	/*for (int i = 0; i < 9; i++)
 	{
 		cout << "' " << After_Bang[i] << " ' ";
 	}
-	cout << endl;
+	cout << endl;*/
 
 
 	//Производим проверки по границам полей у клетки предыдущего попадания
@@ -520,12 +520,12 @@ void after_bang(int Y, int X, int* After_Bang, Point** user, int& bangY,int& ban
 
 }
 
-int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, int(&Global_Daedh)[10][2], int* After_Bang, int* PrevBangOp, Sound* SOUND)
+int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, int(&Global_Daedh)[10][2], int* After_Bang, int* PrevBangAnimation, Sound* SOUND)
 {
 			
-	for (int i = 0; i < 4; i++)						// Записываем в строку состояния выстрела
+	for (int i = 0; i < 2; i++)						// Записываем в строку состояния выстрела
 	{
-		PrevBangOp[i] = -1;
+		PrevBangAnimation[i] = -1;
 	}												
 	if (!GameHod)									// Если ход противника
 	{
@@ -564,6 +564,8 @@ int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, in
 				SOUND[4].play();
 				user[bangY][bangX].SetStatus(1);	// Записываем в клетку "Мимо"	
 				GameHod = !GameHod;					// Переводим ход к игроку
+				PrevBangAnimation[0] = bangY;
+				PrevBangAnimation[1] = bangX;
 				break;								// Выпадаем из свича
 
 			}
@@ -574,7 +576,8 @@ int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, in
 				After_Bang[0] = 1;					// Активация ИИ противника	
 				After_Bang[3] = bangY;				// запись в значений выстрела по У
 				After_Bang[4] = bangX;				// И по Х тоже
-
+				PrevBangAnimation[0] = bangY;
+				PrevBangAnimation[1] = bangX;
 				user[bangY][bangX].SetStatus(2);	// Записываем в клетку попадание
 
 				
@@ -777,7 +780,7 @@ int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, in
 								}
 								else 
 								{
-									cout << "С КОДОМ  Y "<<YY<<"X "<<XX << " Корабль не затоплен" << endl;
+									//cout << "С КОДОМ  Y "<<YY<<"X "<<XX << " Корабль не затоплен" << endl;
 								}
 							}
 						}
@@ -800,13 +803,13 @@ int HodOponent(Point** user, sf::Event& event, bool& GameHod, int& isMontage, in
 	
 	if (After_Bang[0] == -1)
 	{
-		cout << " Состояние AFTER BANG : " << endl;
+		//cout << " Состояние AFTER BANG : " << endl;
 		for (int i = 0; i < 9; i++)
 		{
 			After_Bang[i] = -1;
-			cout << After_Bang[i];
+		//	cout << After_Bang[i];
 		}
-		cout << endl;
+		//cout << endl;
 	}
 		return 1;
 	}

@@ -10,6 +10,7 @@ class Point
 	int size = 50;
 	sf::Vector2f position;
 	bool Animation = false;
+	//bool isMontage = false;
 
 	sf::Texture ActivMissPool;
 	sf::Texture ActivPool;
@@ -30,7 +31,8 @@ class Point
 public:
 	//Chek Activity from Mouse (mouse x, mouse,y)
 	void ChekActiv(int mx, int my);
-
+	
+	
 	//0=void, 1=mis, 2=hit, 3=ship
 	void SetStatus(int status_pool);
 	void SetAnimation(bool Animation);

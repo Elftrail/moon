@@ -136,24 +136,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimatetdText.cpp" />
     <ClCompile Include="chekActivBot.cpp" />
     <ClCompile Include="GenerationShip.cpp" />
     <ClCompile Include="HodOponent.cpp" />
     <ClCompile Include="HodUser.cpp" />
-    <ClCompile Include="ShipMontageProcesser.cpp" />
+    <ClCompile Include="MontageShip_2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="movedShip.cpp" />
+    <ClCompile Include="OverRestart.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="setCoor.cpp" />
     <ClCompile Include="setQuality.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimatetdText.h" />
     <ClInclude Include="chekActivBot.h" />
     <ClInclude Include="GenerationShip.h" />
     <ClInclude Include="HodOponent.h" />
     <ClInclude Include="HodUser.h" />
-    <ClInclude Include="ShipMontageProcesser.h" />
+    <ClInclude Include="MontageShip_2.h" />
     <ClInclude Include="movedShip.h" />
+    <ClInclude Include="OverRestart.h" />
     <ClInclude Include="setCoor.h" />
     <ClInclude Include="setQuality.h" />
     <ClInclude Include="Point.h" />

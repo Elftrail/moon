@@ -31,14 +31,13 @@ sf::Texture ValidShipPool;
 
 void Point::ChekActiv(int mx, int my)
 {
-	if (mx > position.x && mx<(position.x + size) && my > position.y && my < (position.y + size))
+	if ((mx > position.x|| mx == position.x) && mx<(position.x + size) &&( my > position.y || my == position.y )&& my < (position.y + size))
 	{
 		activ = true;
 	}
 	else { activ = false; }
 	SetTextureSprite();
 }
-
 void Point::SetStatus(int status_pool)
 {
 
@@ -205,5 +204,5 @@ void Point::SetTextureSprite()
 			pool.setTexture(NoCorrectActivPool);
 		}
 	}
-	else { std::cout << "ERROR #1 mistake sprite appointment" << std::endl; }
+	//else { std::cout << "ERROR #1 mistake sprite appointment" << std::endl; }
 }
